@@ -8,11 +8,16 @@ import (
 	"image/color"
 )
 
+const (
+	width = 60
+	heigh = 30
+)
+
 func OpenWindow() {
 	opts := engo.RunOptions{
 		Title:          "Net-Speed",
-		Width:          120,
-		Height:         30,
+		Width:          width,
+		Height:         heigh,
 		StandardInputs: true,
 		NotResizable:   true,
 	}
@@ -31,9 +36,12 @@ func (ws *WindowScene) Preload() {
 
 func (ws *WindowScene) Setup(u engo.Updater) {
 	world, _ := u.(*ecs.World)
-	common.SetBackground(color.RGBA64{R: 0xffff, G: 0xffff, B: 0xffff, A: 0xffff})
-	//bitMap := robotgo.GoCaptureScreen() //x,y,w,h
 	world.AddSystem(&common.RenderSystem{})
+	world.AddSystem(&TextSys{})
+	common.SetBackground(color.White)
+	x := 0
+	y := glfw.GetPrimaryMonitor().GetVideoMode().Height - heigh
+	engo.Window.SetPos(x, y)
 }
 
 func (ws *WindowScene) Type() string {
