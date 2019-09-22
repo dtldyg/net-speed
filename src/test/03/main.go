@@ -19,9 +19,7 @@ var (
 )
 
 func main() {
-	fmt.Println(0)
-	StartCatchSpeed()
-	fmt.Println(1)
+	go StartCatchSpeed()
 	for {
 		fmt.Println(DownStreamDataSize)
 		time.Sleep(time.Second)
@@ -43,18 +41,14 @@ func StartCatchSpeed() {
 	fmt.Println("mac:", macAddr)
 
 	// 获取网卡handler，可用于读取或写入数据包
-	fmt.Println("a")
 	handle, err := pcap.OpenLive(deviceName, 1024 /*每个数据包读取的最大值*/, true /*是否开启混杂模式*/, 30*time.Second /*读包超时时长*/)
-	fmt.Println("b")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("c")
 	defer handle.Close()
-	fmt.Println("d")
 
 	// 开始抓包
-	go monitor(handle, macAddr)
+	monitor(handle, macAddr)
 }
 
 func monitor(handle *pcap.Handle, macAddr string) {
@@ -66,9 +60,9 @@ func monitor(handle *pcap.Handle, macAddr string) {
 			ethernet := ethernetLayer.(*layers.Ethernet)
 			// 如果封包的目的MAC是本机则表示是下行的数据包，否则为上行
 			if ethernet.DstMAC.String() == macAddr {
-				DownStreamDataSize += len(packet.Data()) // 统计下行封包总大小
+				DownStreamDataSize += len(packet.Data())
 			} else {
-				UpStreamDataSize += len(packet.Data()) // 统计上行封包总大小
+				UpStreamDataSize += len(packet.Data())
 			}
 		}
 	}

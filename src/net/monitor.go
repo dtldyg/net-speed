@@ -40,7 +40,7 @@ func StartCatchSpeed() {
 	defer handle.Close()
 
 	// 开始抓包
-	go monitor(handle, macAddr)
+	monitor(handle, macAddr)
 }
 
 func monitor(handle *pcap.Handle, macAddr string) {

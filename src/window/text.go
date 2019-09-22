@@ -50,9 +50,11 @@ func (sys *TextSys) New(world *ecs.World) {
 func (sys *TextSys) Update(dt float32) {
 	sys.t += dt
 	if sys.t >= 1 {
+		text := fmt.Sprintf("Down:%s\nUp:%s", getDownSpeed(float64(sys.t)), getUpSpeed(float64(sys.t)))
+		fmt.Println(text)
 		sys.text.RenderComponent.Drawable = common.Text{
 			Font: sys.fnt,
-			Text: fmt.Sprintf("Down:%s\nUp:%s", getDownSpeed(float64(sys.t)), getUpSpeed(float64(sys.t))),
+			Text: text,
 		}
 		sys.t = 0
 	}

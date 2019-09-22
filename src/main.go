@@ -7,7 +7,7 @@ import (
 
 func main() {
 	// 开启网速抓包
-	net.StartCatchSpeed()
+	go net.StartCatchSpeed()
 	// 打开界面
 	window.OpenWindow()
 }

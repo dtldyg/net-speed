@@ -20,10 +20,12 @@ func getUpSpeed(t float64) string {
 // 字节数格式化
 func bytesFormat(b float64) string {
 	if b < 1000 {
-		return fmt.Sprintf("%.1fKB", b)
+		return fmt.Sprintf("%.1fB", b)
 	} else if b < 1024*1000 {
-		return fmt.Sprintf("%.1fMB", b/1024)
+		return fmt.Sprintf("%.1fKB", b/1024)
+	} else if b < 1024*1024*1000 {
+		return fmt.Sprintf("%.1fMB", b/1024/1024)
 	} else {
-		return fmt.Sprintf("%.1fGB", b/1024/1024)
+		return fmt.Sprintf("%.1fGB", b/1024/1024/1024)
 	}
 }
