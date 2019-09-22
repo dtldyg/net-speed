@@ -2,29 +2,46 @@ package window
 
 import (
 	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
+	"image/color"
 )
 
 type TextSys struct {
-	//TODO test entity
-	t float32
+	text Text
+	fnt  *common.Font
+	t    float32
 }
 
 func (sys *TextSys) New(world *ecs.World) {
-	//make entity
-	bgs.world = world
-	bgs.bgEntity = &BGEntity{}
-	// BasicEntity(id)
-	bgs.bgEntity.BasicEntity = ecs.NewBasic()
-	// SpaceComponent(like collider)
-	bgs.bgEntity.SpaceComponent = common.SpaceComponent{}
-	// RenderComponent(render)
+	sys.fnt = &common.Font{
+		URL:  "Consola.ttf",
+		FG:   color.Black,
+		Size: 10,
+	}
+	err := sys.fnt.CreatePreloaded()
+	if err != nil {
+		panic(err)
+	}
+
+	sys.text = Text{BasicEntity: ecs.NewBasic()}
+	sys.text.RenderComponent.Drawable = common.Text{
+		Font: sys.fnt,
+		Text: "Hello\nworld!",
+	}
+	sys.text.SetShader(common.TextShader)
+	sys.text.RenderComponent.SetZIndex(1)
+	sys.text.SpaceComponent = common.SpaceComponent{
+		Position: engo.Point{X: 5, Y: 0},
+		Width:    width,
+		Height:   height,
+	}
 
 	//add entity to system
 	for _, system := range world.Systems() {
-		switch sys := system.(type) {
+		switch s := system.(type) {
 		case *common.RenderSystem:
-			sys.Add(&bgs.bgEntity.BasicEntity, &bgs.bgEntity.RenderComponent, &bgs.bgEntity.SpaceComponent)
+			s.Add(&sys.text.BasicEntity, &sys.text.RenderComponent, &sys.text.SpaceComponent)
 		}
 	}
 }
@@ -38,3 +55,9 @@ func (sys *TextSys) Update(dt float32) {
 }
 
 func (sys *TextSys) Remove(e ecs.BasicEntity) {}
+
+type Text struct {
+	ecs.BasicEntity
+	common.SpaceComponent
+	common.RenderComponent
+}
