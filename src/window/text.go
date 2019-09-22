@@ -1,6 +1,7 @@
 package window
 
 import (
+	"fmt"
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
 	"github.com/EngoEngine/engo/common"
@@ -27,7 +28,7 @@ func (sys *TextSys) New(world *ecs.World) {
 	sys.text = Text{BasicEntity: ecs.NewBasic()}
 	sys.text.RenderComponent.Drawable = common.Text{
 		Font: sys.fnt,
-		Text: "Hello\nworld!",
+		Text: "net\nspeed",
 	}
 	sys.text.SetShader(common.TextShader)
 	sys.text.RenderComponent.SetZIndex(1)
@@ -49,8 +50,11 @@ func (sys *TextSys) New(world *ecs.World) {
 func (sys *TextSys) Update(dt float32) {
 	sys.t += dt
 	if sys.t >= 1 {
+		sys.text.RenderComponent.Drawable = common.Text{
+			Font: sys.fnt,
+			Text: fmt.Sprintf("Down:%s\nUp:%s", getDownSpeed(float64(sys.t)), getUpSpeed(float64(sys.t))),
+		}
 		sys.t = 0
-		//TODO 更新
 	}
 }
 
