@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-gl/glfw/v3.2/glfw"
 	"runtime"
 )
@@ -18,6 +19,9 @@ func main() {
 	}
 	defer glfw.Terminate()
 
+	fmt.Println(glfw.GetPrimaryMonitor().GetVideoMode().Height)
+	fmt.Println(glfw.GetPrimaryMonitor().GetVideoMode().Width)
+
 	glfw.WindowHint(glfw.Decorated, 0)
 
 	window, err := glfw.CreateWindow(50, 50, "Testing", nil, nil)
@@ -28,8 +32,6 @@ func main() {
 	window.MakeContextCurrent()
 
 	for !window.ShouldClose() {
-		// Do OpenGL stuff.
-		//window.SwapBuffers()
 		glfw.PollEvents()
 	}
 }
